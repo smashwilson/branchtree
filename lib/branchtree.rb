@@ -6,6 +6,7 @@ module Branchtree
     command_classes = {
       "show" => Branchtree::Commands::Show,
       "checkout" => Branchtree::Commands::Checkout,
+      "apply" => Branchtree::Commands::Apply,
     }
 
     command_name = argv.shift || "show"
@@ -28,17 +29,19 @@ module Branchtree
         @cmd ||= TTY::Command.new(printer: :null)
       end
 
+      def qcmd
+        @qcmd ||= TTY::Command.new(printer: :quiet)
+      end
+
       def prompt
         @prompt ||= TTY::Prompt.new
       end
     end
 
-    def cmd
-      Branchtree::Context.cmd
-    end
-
-    def prompt
-      Branchtree::Context.prompt
+    %i[cmd qcmd prompt].each do |methodname|
+      define_method(methodname) do
+        Branchtree::Context.public_send(methodname)
+      end
     end
   end
 end
@@ -50,3 +53,4 @@ require "branchtree/situation"
 require "branchtree/commands/common"
 require "branchtree/commands/show"
 require "branchtree/commands/checkout"
+require "branchtree/commands/apply"
