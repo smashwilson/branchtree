@@ -1,4 +1,5 @@
 module Branchtree
+
   class Situation
     include Branchtree::Context
 
@@ -15,4 +16,5 @@ module Branchtree
       ).out.chomp
     end
   end
+  
 end
