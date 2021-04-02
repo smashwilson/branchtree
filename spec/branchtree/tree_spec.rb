@@ -26,6 +26,21 @@ RSpec.describe Tree do
     end
   end
 
+  context "#find_branch" do
+    it "locates an existing branch by name" do
+      tree = Tree.load(fixture_path("sample-map.yml"))
+      branch = tree.find_branch("branch-2b")
+      expect(branch.name).to eq("branch-2b")
+      expect(branch).to be_rebase
+    end
+
+    it "returns nil when no branch is found" do
+      tree = Tree.load(fixture_path("sample-map.yml"))
+      branch = tree.find_branch("no")
+      expect(branch).to be_nil
+    end
+  end
+
   context "#depth_first" do
     it "traverses loaded branches in depth-first order" do
       tree = Tree.load(fixture_path("sample-map.yml"))

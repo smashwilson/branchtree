@@ -15,6 +15,14 @@ class Branchtree::Tree
     @roots = roots
   end
 
+  # Locate a known branch in the tree by abbreviated ref name, or return nil if none are found.
+  def find_branch(name)
+    breadth_first do |level, branch|
+      return branch if branch.name == name
+    end
+    nil
+  end
+
   def depth_first(&block)
     depth_first_from(level: 0, branches: roots, &block)
   end
