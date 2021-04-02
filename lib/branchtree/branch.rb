@@ -34,7 +34,7 @@ module Branchtree
       @rebase
     end
 
-    # Return the String name of the ref that this branch is based on. New changes to this parent pref will
+    # Return the String name of the ref that this branch is based on. New changes to this parent ref will
     # be merged in on "apply".
     def parent_branch_name
       return @parent.name if @parent
@@ -49,6 +49,11 @@ module Branchtree
     # Return the full git ref name of this branch.
     def full_ref
       "refs/heads/#{name}"
+    end
+
+    # Checkout this branch with git
+    def checkout
+      cmd.run("git", "checkout", name)
     end
 
     class NullInfo
