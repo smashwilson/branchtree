@@ -29,6 +29,10 @@ module Branchtree
         end
       end
 
+      def load_situation
+        Situation.new.tap(&:read)
+      end
+
       def load_tree
         Tree.load(params[:mapfile])
       end
