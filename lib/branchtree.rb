@@ -3,7 +3,8 @@ require "tty-command"
 module Branchtree
   def self.execute(argv)
     command_classes = {
-      "show" => Branchtree::Commands::Show
+      "show" => Branchtree::Commands::Show,
+      "checkout" => Branchtree::Commands::Checkout,
     }
 
     command_name = argv.shift || "show"
@@ -20,15 +21,23 @@ module Branchtree
 
   module Context
     class << self
-      attr_writer :cmd
+      attr_writer :cmd, :prompt
 
       def cmd
         @cmd ||= TTY::Command.new(printer: :null)
+      end
+
+      def prompt
+        @prompt ||= TTY::Prompt.new
       end
     end
 
     def cmd
       Branchtree::Context.cmd
+    end
+
+    def prompt
+      Branchtree::Context.prompt
     end
   end
 end
@@ -39,3 +48,4 @@ require "branchtree/tree"
 require "branchtree/situation"
 require "branchtree/commands/common"
 require "branchtree/commands/show"
+require "branchtree/commands/checkout"
