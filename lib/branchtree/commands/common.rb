@@ -9,7 +9,7 @@ module Branchtree
         program "branchtree"
       end
     
-      flag :mapfile do
+      option :mapfile do
         short "-m"
         long "--mapfile PATH"
         desc "Path to the YAML file describing desired branch topography"
