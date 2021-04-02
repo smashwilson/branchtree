@@ -5,7 +5,7 @@ RSpec.describe Situation do
 
   it "identifies the current branch by symbolic ref" do
     allow(Context.cmd).to receive(:run)
-      .with("git", "rev-parse", "--abbrev-ref", "HEAD", printer: :null)
+      .with("git", "rev-parse", "--abbrev-ref", "HEAD")
       .and_return(double(out: "some-ref\n"))
 
     situation.read

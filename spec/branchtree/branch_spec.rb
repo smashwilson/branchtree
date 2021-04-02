@@ -36,7 +36,7 @@ RSpec.describe Branch do
 
     it "returns 'main' when that branch exists" do
       allow(Context.cmd).to receive(:run!)
-        .with("git", "rev-parse", "--verify", "--quiet", "refs/heads/main", printer: :null)
+        .with("git", "rev-parse", "--verify", "--quiet", "refs/heads/main")
         .and_return(double(success?: true))
 
       orphan = Branch.new("ref", nil, false)
@@ -45,7 +45,7 @@ RSpec.describe Branch do
 
     it "returns 'master when that branch exists" do
       allow(Context.cmd).to receive(:run!)
-        .with("git", "rev-parse", "--verify", "--quiet", "refs/heads/main", printer: :null)
+        .with("git", "rev-parse", "--verify", "--quiet", "refs/heads/main")
         .and_return(double(success?: false))
 
       orphan = Branch.new("ref", nil, false)
@@ -62,7 +62,7 @@ RSpec.describe Branch do
 
     it "detects when the current ref is not a valid branch name" do
       allow(Context.cmd).to receive(:run!)
-        .with("git", "rev-parse", "--verify", "--quiet", "refs/heads/the-ref", printer: :null)
+        .with("git", "rev-parse", "--verify", "--quiet", "refs/heads/the-ref")
         .and_return(double(success?: false))
       
       branch.info.populate
@@ -77,13 +77,13 @@ RSpec.describe Branch do
 
     it "identifies the number of commits ahead and behind its parent" do
       allow(Context.cmd).to receive(:run!)
-        .with("git", "rev-parse", "--verify", "--quiet", "refs/heads/the-ref", printer: :null)
+        .with("git", "rev-parse", "--verify", "--quiet", "refs/heads/the-ref")
         .and_return(double(success?: true))
       allow(Context.cmd).to receive(:run)
-        .with("git", "rev-list", "--left-right", "--count", "refs/heads/parent-ref", "refs/heads/the-ref", printer: :null)
+        .with("git", "rev-list", "--left-right", "--count", "refs/heads/parent-ref", "refs/heads/the-ref")
         .and_return(double(out: "2\t5\n"))
       allow(Context.cmd).to receive(:run!)
-        .with("git", "rev-parse", "--symbolic-full-name", "refs/heads/the-ref@{u}", printer: :null)
+        .with("git", "rev-parse", "--symbolic-full-name", "refs/heads/the-ref@{u}")
         .and_return(double(success?: false))
       
       branch.info.populate
@@ -98,16 +98,16 @@ RSpec.describe Branch do
 
     it "identifies when this branch has an upstream" do
       allow(Context.cmd).to receive(:run!)
-        .with("git", "rev-parse", "--verify", "--quiet", "refs/heads/the-ref", printer: :null)
+        .with("git", "rev-parse", "--verify", "--quiet", "refs/heads/the-ref")
         .and_return(double(success?: true))
       allow(Context.cmd).to receive(:run)
-        .with("git", "rev-list", "--left-right", "--count", "refs/heads/parent-ref", "refs/heads/the-ref", printer: :null)
+        .with("git", "rev-list", "--left-right", "--count", "refs/heads/parent-ref", "refs/heads/the-ref")
         .and_return(double(out: "0\t3\n"))
       allow(Context.cmd).to receive(:run!)
-        .with("git", "rev-parse", "--symbolic-full-name", "refs/heads/the-ref@{u}", printer: :null)
+        .with("git", "rev-parse", "--symbolic-full-name", "refs/heads/the-ref@{u}")
         .and_return(double(success?: true, out: "refs/remotes/origin/the-ref\n"))
       allow(Context.cmd).to receive(:run)
-        .with("git", "rev-list", "--left-right", "--count", "refs/remotes/origin/the-ref", "refs/heads/the-ref", printer: :null)
+        .with("git", "rev-list", "--left-right", "--count", "refs/remotes/origin/the-ref", "refs/heads/the-ref")
         .and_return(double(out: "3\t2\n"))
       
       branch.info.populate
