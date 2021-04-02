@@ -1,28 +1,55 @@
 # Branchtree
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/branchtree`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+Command-line tool to interactively manage chains or trees of dependent branches in a git repository.
 
 ## Installation
 
-Add this line to your application's Gemfile:
-
-```ruby
-gem 'branchtree'
-```
-
-And then execute:
-
-    $ bundle install
-
-Or install it yourself as:
+Install the gem from Rubygems:
 
     $ gem install branchtree
 
 ## Usage
 
-TODO: Write usage instructions here
+Configure your desired branch topology by creating a file called `branchtree-map.yml` in your home directory.
+
+```yml
+---
+- branch: first-branch
+  children:
+  - branch: second-branch-v1
+    children:
+    - branch: third-branch-v1
+      rebase: true
+  - branch: second-branch-v2
+```
+
+View your current place in the branch tree by running:
+
+```
+$ branchtree show
+
+# Or:
+
+$ branchtree
+```
+
+Interactively check out a different branch in the tree with:
+
+```
+$ branchtree checkout
+```
+
+If you've made commits to a non-leaf branch, run this to propagate changes forward through the tree with merges and rebases:
+
+```
+$ branchtree apply
+```
+
+To see the full usage, run:
+
+```
+$ branchtree help
+```
 
 ## Development
 
