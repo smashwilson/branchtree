@@ -1,6 +1,8 @@
 
 # Represents a git branch in the current repository.
 class Branchtree::Branch
+  include Branchtree::Context
+
   # Recursively load a Branch instance and its children, if any, from deserialized YAML.
   def self.load(node, parent)
     new(node.fetch("branch"), parent, node.fetch("rebase", false)).tap do |branch|
@@ -22,5 +24,17 @@ class Branchtree::Branch
 
   def rebase?
     @rebase
+  end
+
+  # Return the String name of the ref that this branch is based on. New changes to this parent pref will
+  # be merged in on "apply".
+  def parent_branch_name
+    return @parent.name if @parent
+
+    if cmd.run!("git", "rev-parse", "--verify", "--quiet", "refs/heads/main", printer: :null).success?
+      "main"
+    else
+      "master"
+    end
   end
 end

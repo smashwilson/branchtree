@@ -1,4 +1,5 @@
 require "bundler/setup"
+require "tty-command"
 require "branchtree"
 
 include Branchtree
@@ -18,3 +19,6 @@ end
 def fixture_path(*name)
   File.join(__dir__, "fixtures", *name)
 end
+
+# Prevent TTY::Command from actually executing anything in specs
+Branchtree::Context.cmd = TTY::Command.new(dry_run: true)

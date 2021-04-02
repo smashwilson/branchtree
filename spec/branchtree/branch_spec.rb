@@ -1,3 +1,5 @@
+require "tty-command"
+
 RSpec.describe Branch do
   context ".load" do
     it "requires a 'branch' key" do
@@ -21,6 +23,33 @@ RSpec.describe Branch do
       branch = Branch.load({"branch" => "parent", "children" => [{"branch" => "child0"}, {"branch" => "child1"}]}, nil)
       expect(branch.children.size).to eq(2)
       expect(branch.children.map(&:name)).to contain_exactly("child0", "child1")
+    end
+  end
+
+  context "#parent_branch_name" do
+    it "returns the name of the parent branch when one is present" do
+      parent = Branch.new("parent-ref", nil, false)
+      child = Branch.new("child-ref", parent, false)
+
+      expect(child.parent_branch_name).to eq("parent-ref")
+    end
+
+    it "returns 'main' when that branch exists" do
+      allow(Context.cmd).to receive(:run!)
+        .with("git", "rev-parse", "--verify", "--quiet", "refs/heads/main", printer: :null)
+        .and_return(double(success?: true))
+
+      orphan = Branch.new("ref", nil, false)
+      expect(orphan.parent_branch_name).to eq("main")
+    end
+
+    it "returns 'master when that branch exists" do
+      allow(Context.cmd).to receive(:run!)
+        .with("git", "rev-parse", "--verify", "--quiet", "refs/heads/main", printer: :null)
+        .and_return(double(success?: false))
+
+      orphan = Branch.new("ref", nil, false)
+      expect(orphan.parent_branch_name).to eq("master")
     end
   end
 end
