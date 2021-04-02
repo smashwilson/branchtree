@@ -1,4 +1,5 @@
 require "tty-command"
+require "tty-prompt"
 
 module Branchtree
   def self.execute(argv)

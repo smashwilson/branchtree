@@ -3,6 +3,8 @@ require "branchtree/commands/common"
 module Branchtree
   module Commands
     class Checkout < Common
+      include Branchtree::Context
+
       usage do
         program "branchtree"
         desc "Navigate the branch structure"
@@ -11,10 +13,11 @@ module Branchtree
       def execute
         super
 
+        situation = load_situation
         tree = load_tree
         current_branch = tree.find_branch(situation.current_branch_name)
 
-        choice = Branchtree.prompt.select("Choose a branch to check out:") do |menu|
+        choice = prompt.select("Choose a branch to check out:") do |menu|
           current_index = nil
           index = 0
           tree.depth_first do |level, branch|
@@ -32,7 +35,7 @@ module Branchtree
           exit 0
         end
 
-        puts "Chosen: #{branch.name}"
+        choice.checkout
       end
     end
   end
