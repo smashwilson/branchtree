@@ -21,7 +21,7 @@ module Branchtree
           current_index = nil
           index = 0
           tree.depth_first do |level, branch|
-            menu.choice "#{' ' * level}#{branch.name}", branch
+            menu.choice "#{'  ' * level}#{branch.name}", branch
 
             current_index = index if branch == current_branch
             index += 1

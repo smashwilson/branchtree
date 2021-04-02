@@ -31,7 +31,7 @@ module Branchtree
             line << "    "
           end
 
-          line << ' ' * level
+          line << "  " * level
           line << branch.name
 
           if !branch.info.valid?
