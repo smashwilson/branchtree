@@ -23,7 +23,7 @@ module Branchtree
 
   module Context
     class << self
-      attr_writer :cmd, :prompt
+      attr_writer :cmd, :qcmd, :prompt
 
       def cmd
         @cmd ||= TTY::Command.new(printer: :null)
