@@ -6,6 +6,7 @@ module Branchtree
     command_classes = {
       "show" => Branchtree::Commands::Show,
       "checkout" => Branchtree::Commands::Checkout,
+      "apply" => Branchtree::Commands::Apply,
     }
 
     command_name = argv.shift || "show"
@@ -40,7 +41,7 @@ module Branchtree
     %i[cmd qcmd prompt].each do |methodname|
       define_method(methodname) do
         Branchtree::Context.public_send(methodname)
-    end
+      end
     end
   end
 end
@@ -52,3 +53,4 @@ require "branchtree/situation"
 require "branchtree/commands/common"
 require "branchtree/commands/show"
 require "branchtree/commands/checkout"
+require "branchtree/commands/apply"
