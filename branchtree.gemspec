@@ -4,7 +4,7 @@ Gem::Specification.new do |spec|
   spec.name          = "branchtree"
   spec.version       = Branchtree::VERSION
   spec.authors       = ["Ash Wilson"]
-  spec.email         = ["smashwilson@github.com"]
+  spec.email         = ["smashwilson@gmail.com"]
 
   spec.summary       = %q{TODO: Write a short summary, because RubyGems requires one.}
   spec.description   = %q{TODO: Write a longer description or delete this line.}
