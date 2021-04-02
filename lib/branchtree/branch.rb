@@ -98,7 +98,7 @@ module Branchtree
 
         # Count ahead-behind from parent
         ahead_behind_parent = @branch.cmd.run(
-          "git", "rev-list", "--left-right", "--count", "refs/heads/#{@branch.parent_branch_name}", @branch.full_ref,
+          "git", "rev-list", "--left-right", "--count", "refs/heads/#{@branch.parent_branch_name}...#{@branch.full_ref}",
         ).out.chomp
         parent_behind, parent_ahead = ahead_behind_parent.split(/\t/, 2).map(&:to_i)
 
@@ -111,7 +111,7 @@ module Branchtree
           upstream_ref = upstream_result.out.chomp
 
           ahead_behind_upstream = @branch.cmd.run(
-            "git", "rev-list", "--left-right", "--count", upstream_ref, @branch.full_ref,
+            "git", "rev-list", "--left-right", "--count", "#{upstream_ref}...#{@branch.full_ref}",
           ).out.chomp
           upstream_behind, upstream_ahead = ahead_behind_upstream.split(/\t/, 2).map(&:to_i)
         end
