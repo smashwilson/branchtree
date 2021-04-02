@@ -22,6 +22,10 @@ class Branchtree::Branch
     @children = []
   end
 
+  def root?
+    @parent.nil?
+  end
+
   def rebase?
     @rebase
   end
