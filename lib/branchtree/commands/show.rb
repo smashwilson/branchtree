@@ -16,6 +16,13 @@ module Branchtree
         current_branch = tree.find_branch(situation.current_branch_name)
 
         tree.depth_first do |level, branch|
+          message = "loading #{branch.name}"
+          print message
+          branch.info.populate
+          print "\r#{' ' * message.size}\r"
+        end
+
+        tree.depth_first do |level, branch|
           line = ""
 
           if branch == current_branch
@@ -26,6 +33,17 @@ module Branchtree
 
           line << ' ' * level
           line << branch.name
+
+          if !branch.info.valid?
+            line << " (branch missing)"
+          else
+            if branch.info.behind_parent > 0
+              line << " - #{branch.info.behind_parent} commits behind parent"
+            end
+            if branch.info.ahead_of_upstream > 0
+              line << " - #{branch.info.ahead_of_upstream} unpushed commits"
+            end
+          end
 
           puts line
         end
