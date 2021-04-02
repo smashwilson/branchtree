@@ -36,6 +36,14 @@ module Branchtree
       def load_tree
         Tree.load(params[:mapfile])
       end
+
+      def pluralize(quantity, word, plural: "#{word}s")
+        if quantity == 1
+          "1 #{word}"
+        else
+          "#{quantity} #{plural}"
+        end
+      end
     end
   end
 end
