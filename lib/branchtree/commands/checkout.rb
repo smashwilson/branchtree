@@ -19,7 +19,7 @@ module Branchtree
 
         choice = prompt.select("Choose a branch to check out:") do |menu|
           current_index = nil
-          index = 0
+          index = 1
           tree.depth_first do |level, branch|
             menu.choice "#{'  ' * level}#{branch.name}", branch
 
