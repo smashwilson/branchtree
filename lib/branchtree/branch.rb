@@ -56,6 +56,14 @@ module Branchtree
       cmd.run("git", "checkout", name)
     end
 
+    def merge_parent
+      qcmd.run!("git", "merge", parent_branch_name)
+    end
+
+    def rebase_parent
+      qcmd.run!("git", "rebase", parent_branch_name)
+    end
+
     class NullInfo
       def initialize(branch)
         @branch = branch
