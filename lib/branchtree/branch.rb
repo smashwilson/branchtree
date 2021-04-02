@@ -39,7 +39,7 @@ module Branchtree
     def parent_branch_name
       return @parent.name if @parent
 
-      if cmd.run!("git", "rev-parse", "--verify", "--quiet", "refs/heads/main", printer: :null).success?
+      if cmd.run!("git", "rev-parse", "--verify", "--quiet", "refs/heads/main").success?
         "main"
       else
         "master"
@@ -86,7 +86,7 @@ module Branchtree
 
       def populate
         # Are we valid?
-        valid_result = @branch.cmd.run!("git", "rev-parse", "--verify", "--quiet", @branch.full_ref, printer: :null)
+        valid_result = @branch.cmd.run!("git", "rev-parse", "--verify", "--quiet", @branch.full_ref)
         unless valid_result.success?
           return @branch.info = InvalidInfo.new(@branch)
         end
@@ -94,7 +94,6 @@ module Branchtree
         # Count ahead-behind from parent
         ahead_behind_parent = @branch.cmd.run(
           "git", "rev-list", "--left-right", "--count", "refs/heads/#{@branch.parent_branch_name}", @branch.full_ref,
-          printer: :null,
         ).out.chomp
         parent_behind, parent_ahead = ahead_behind_parent.split(/\t/, 2).map(&:to_i)
 
@@ -102,14 +101,12 @@ module Branchtree
         upstream_ref, upstream_behind, upstream_ahead = "", 0, 0
         upstream_result = @branch.cmd.run!(
           "git", "rev-parse", "--symbolic-full-name", "#{@branch.full_ref}@{u}",
-          printer: :null,
         )
         if upstream_result.success?
           upstream_ref = upstream_result.out.chomp
 
           ahead_behind_upstream = @branch.cmd.run(
             "git", "rev-list", "--left-right", "--count", upstream_ref, @branch.full_ref,
-            printer: :null,
           ).out.chomp
           upstream_behind, upstream_ahead = ahead_behind_upstream.split(/\t/, 2).map(&:to_i)
         end

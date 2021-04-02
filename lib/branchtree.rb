@@ -23,7 +23,7 @@ module Branchtree
       attr_writer :cmd
 
       def cmd
-        @cmd ||= TTY::Command.new
+        @cmd ||= TTY::Command.new(printer: :null)
       end
     end
 

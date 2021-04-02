@@ -11,8 +11,7 @@ module Branchtree
 
     def read
       @current_branch_name = cmd.run(
-        "git", "rev-parse", "--abbrev-ref", "HEAD",
-        printer: :null
+        "git", "rev-parse", "--abbrev-ref", "HEAD"
       ).out.chomp
     end
   end
