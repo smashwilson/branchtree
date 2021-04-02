@@ -1,7 +1,7 @@
 RSpec.describe Branch do
   context ".load" do
     it "requires a 'branch' key" do
-      expect { Branch.load({}, nil) }.to raise_error(Branch::LoadError)
+      expect { Branch.load({}, nil) }.to raise_error(KeyError)
     end
 
     it "defaults rebase off and empty children" do

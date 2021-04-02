@@ -1,0 +1,13 @@
+---
+- branch: branch-0
+  children:
+  - branch: branch-1a
+    children:
+    - branch: branch-2a
+      children:
+      - branch: branch-3a
+        rebase: true
+  - branch: branch-1b
+    children:
+    - branch: branch-2b
+      rebase: true
