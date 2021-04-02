@@ -123,7 +123,7 @@ RSpec.describe Branch do
 
   context "#checkout" do
     it "checks out the named branch" do
-      expect(Context.cmd).to receive(:run)
+      expect(Context.qcmd).to receive(:run)
         .with("git", "checkout", "the-ref")
       
       branch = Branch.new("the-ref", nil, false)

@@ -53,7 +53,7 @@ module Branchtree
 
     # Checkout this branch with git
     def checkout
-      cmd.run("git", "checkout", name)
+      qcmd.run("git", "checkout", name)
     end
 
     def merge_parent

@@ -22,3 +22,4 @@ end
 
 # Prevent TTY::Command from actually executing anything in specs
 Branchtree::Context.cmd = TTY::Command.new(dry_run: true)
+Branchtree::Context.qcmd = TTY::Command.new(dry_run: true)
