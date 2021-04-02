@@ -27,4 +27,9 @@ Gem::Specification.new do |spec|
   spec.bindir        = "exe"
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
+
+  spec.add_runtime_dependency "tty-command", "~> 0.10.0"
+  spec.add_runtime_dependency "tty-logger", "~> 0.6.0"
+  spec.add_runtime_dependency "tty-prompt", "~> 0.23.0"
+  spec.add_runtime_dependency "tty-option", "~> 0.1.0"
 end
