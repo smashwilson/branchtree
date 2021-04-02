@@ -28,17 +28,19 @@ module Branchtree
         @cmd ||= TTY::Command.new(printer: :null)
       end
 
+      def qcmd
+        @qcmd ||= TTY::Command.new(printer: :quiet)
+      end
+
       def prompt
         @prompt ||= TTY::Prompt.new
       end
     end
 
-    def cmd
-      Branchtree::Context.cmd
+    %i[cmd qcmd prompt].each do |methodname|
+      define_method(methodname) do
+        Branchtree::Context.public_send(methodname)
     end
-
-    def prompt
-      Branchtree::Context.prompt
     end
   end
 end
