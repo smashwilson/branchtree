@@ -25,4 +25,38 @@ RSpec.describe Tree do
       expect(child10.name).to eq("branch-2b")
     end
   end
+
+  context "#depth_first" do
+    it "traverses loaded branches in depth-first order" do
+      tree = Tree.load(fixture_path("sample-map.yml"))
+
+      results = []
+      tree.depth_first { |depth, branch| results << [depth, branch.name] }
+      expect(results).to eq([
+        [0, "branch-0"],
+        [1, "branch-1a"],
+        [2, "branch-2a"],
+        [3, "branch-3a"],
+        [1, "branch-1b"],
+        [2, "branch-2b"],
+      ])
+    end
+  end
+
+  context "#breadth_first" do
+    it "traverses loaded branches in breadth-first order" do
+      tree = Tree.load(fixture_path("sample-map.yml"))
+
+      results = []
+      tree.breadth_first { |depth, branch| results << [depth, branch.name] }
+      expect(results).to eq([
+        [0, "branch-0"],
+        [1, "branch-1a"],
+        [1, "branch-1b"],
+        [2, "branch-2a"],
+        [2, "branch-2b"],
+        [3, "branch-3a"],
+      ])
+    end
+  end
 end
