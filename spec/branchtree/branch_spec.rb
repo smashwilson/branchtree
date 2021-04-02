@@ -52,4 +52,72 @@ RSpec.describe Branch do
       expect(orphan.parent_branch_name).to eq("master")
     end
   end
+
+  context "#info" do
+    let(:branch) { Branch.new("the-ref", Branch.new("parent-ref", nil, false), false) }
+
+    it "begins unpopulated" do
+      expect(branch.info).to be_empty
+    end
+
+    it "detects when the current ref is not a valid branch name" do
+      allow(Context.cmd).to receive(:run!)
+        .with("git", "rev-parse", "--verify", "--quiet", "refs/heads/the-ref", printer: :null)
+        .and_return(double(success?: false))
+      
+      branch.info.populate
+      expect(branch.info).not_to be_empty
+      expect(branch.info).not_to be_valid
+      expect(branch.info.ahead_of_parent).to eq(0)
+      expect(branch.info.behind_parent).to eq(0)
+      expect(branch.info).not_to have_upstream
+      expect(branch.info.ahead_of_upstream).to eq(0)
+      expect(branch.info.behind_upstream).to eq(0)
+    end
+
+    it "identifies the number of commits ahead and behind its parent" do
+      allow(Context.cmd).to receive(:run!)
+        .with("git", "rev-parse", "--verify", "--quiet", "refs/heads/the-ref", printer: :null)
+        .and_return(double(success?: true))
+      allow(Context.cmd).to receive(:run)
+        .with("git", "rev-list", "--left-right", "--count", "refs/heads/parent-ref", "refs/heads/the-ref", printer: :null)
+        .and_return(double(out: "2\t5\n"))
+      allow(Context.cmd).to receive(:run!)
+        .with("git", "rev-parse", "--symbolic-full-name", "refs/heads/the-ref@{u}", printer: :null)
+        .and_return(double(success?: false))
+      
+      branch.info.populate
+      expect(branch.info).not_to be_empty
+      expect(branch.info).to be_valid
+      expect(branch.info.ahead_of_parent).to eq(5)
+      expect(branch.info.behind_parent).to eq(2)
+      expect(branch.info).not_to have_upstream
+      expect(branch.info.ahead_of_upstream).to eq(0)
+      expect(branch.info.behind_upstream).to eq(0)
+    end
+
+    it "identifies when this branch has an upstream" do
+      allow(Context.cmd).to receive(:run!)
+        .with("git", "rev-parse", "--verify", "--quiet", "refs/heads/the-ref", printer: :null)
+        .and_return(double(success?: true))
+      allow(Context.cmd).to receive(:run)
+        .with("git", "rev-list", "--left-right", "--count", "refs/heads/parent-ref", "refs/heads/the-ref", printer: :null)
+        .and_return(double(out: "0\t3\n"))
+      allow(Context.cmd).to receive(:run!)
+        .with("git", "rev-parse", "--symbolic-full-name", "refs/heads/the-ref@{u}", printer: :null)
+        .and_return(double(success?: true, out: "refs/remotes/origin/the-ref\n"))
+      allow(Context.cmd).to receive(:run)
+        .with("git", "rev-list", "--left-right", "--count", "refs/remotes/origin/the-ref", "refs/heads/the-ref", printer: :null)
+        .and_return(double(out: "3\t2\n"))
+      
+      branch.info.populate
+      expect(branch.info).not_to be_empty
+      expect(branch.info).to be_valid
+      expect(branch.info.ahead_of_parent).to eq(3)
+      expect(branch.info.behind_parent).to eq(0)
+      expect(branch.info).to have_upstream
+      expect(branch.info.ahead_of_upstream).to eq(2)
+      expect(branch.info.behind_upstream).to eq(3)
+    end
+  end
 end
