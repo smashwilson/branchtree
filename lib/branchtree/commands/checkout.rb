@@ -29,11 +29,13 @@ module Branchtree
         end
 
         if choice == :cancel
-          puts "Goodbye!"
+          logger.info "Goodbye!"
           exit 0
         end
 
+        logger.debug "Checking out branch #{choice.name}."
         choice.checkout
+        logger.success "Checkout successful."
       end
     end
   end
