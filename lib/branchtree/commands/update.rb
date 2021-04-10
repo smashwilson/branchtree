@@ -2,7 +2,7 @@ require "branchtree/commands/common"
 
 module Branchtree
   module Commands
-    class Apply < Common
+    class Update < Common
       include Branchtree::Context
 
       usage do
