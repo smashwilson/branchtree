@@ -6,7 +6,7 @@ module Branchtree
     command_classes = {
       "show" => Branchtree::Commands::Show,
       "checkout" => Branchtree::Commands::Checkout,
-      "apply" => Branchtree::Commands::Apply,
+      "update" => Branchtree::Commands::Update,
     }
 
     command_name = argv.shift || "show"
@@ -53,4 +53,4 @@ require "branchtree/situation"
 require "branchtree/commands/common"
 require "branchtree/commands/show"
 require "branchtree/commands/checkout"
-require "branchtree/commands/apply"
+require "branchtree/commands/update"

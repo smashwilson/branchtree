@@ -42,7 +42,7 @@ $ branchtree checkout
 If you've made commits to a non-leaf branch, run this to propagate changes forward through the tree with merges and rebases:
 
 ```
-$ branchtree apply
+$ branchtree update
 ```
 
 To see the full usage, run:
