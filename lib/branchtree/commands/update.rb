@@ -26,33 +26,33 @@ module Branchtree
           next if branch.info.behind_parent.zero?
 
           if branch.info.behind_upstream > 0 && branch.info.ahead_upstream > 0
-            puts "#{branch.name} has diverged from its upstream."
-            puts "Please resolve this with a force push or reset --hard, then run again."
+            logger.error "#{branch.name} has diverged from its upstream."
+            logger.error "Please resolve this with a force push or reset --hard, then run again."
             exit 1
           end
 
-          puts "#{branch.name} is #{pluralize(branch.info.behind_parent, "commit")} behind its parent branch."
-          puts "Checking out #{branch.name}."
+          logger.info "#{branch.name} is #{pluralize(branch.info.behind_parent, "commit")} behind its parent branch."
+          logger.info "Checking out #{branch.name}."
           branch.checkout
 
           success = false
           if branch.rebase?
-            puts "Rebasing #{branch.name} on #{branch.parent_branch_name}."
+            logger.info "Rebasing #{branch.name} on #{branch.parent_branch_name}."
             success = branch.rebase_parent.success?
           else
-            puts "Merging #{branch.parent_branch_name} into #{branch.name}."
+            logger.info "Merging #{branch.parent_branch_name} into #{branch.name}."
             success = branch.merge_parent.success?
           end
 
           unless success
-            puts "Please resolve these problems and run again."
+            logger.error "Please resolve these problems and run again."
             exit 1
           end
 
-          puts "Up to date."
+          logger.success "#{branch.name} is now up to date."
         end
 
-        puts "All branches are now up to date."
+        logger.success "All branches are now up to date."
       end
     end
   end
