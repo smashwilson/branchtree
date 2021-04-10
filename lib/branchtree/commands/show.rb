@@ -16,10 +16,8 @@ module Branchtree
         current_branch = tree.find_branch(situation.current_branch_name)
 
         tree.depth_first do |level, branch|
-          message = "loading #{branch.name}"
-          print message
+          logger.debug "Loading branch #{branch.name}."
           branch.info.populate
-          print "\r#{' ' * message.size}\r"
         end
 
         tree.depth_first do |level, branch|

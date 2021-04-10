@@ -3,8 +3,6 @@ require "branchtree/commands/common"
 module Branchtree
   module Commands
     class Checkout < Common
-      include Branchtree::Context
-
       usage do
         program "branchtree"
         desc "Navigate the branch structure"
@@ -31,11 +29,13 @@ module Branchtree
         end
 
         if choice == :cancel
-          puts "Goodbye!"
+          logger.info "Goodbye!"
           exit 0
         end
 
+        logger.debug "Checking out branch #{choice.name}."
         choice.checkout
+        logger.success "Checkout successful."
       end
     end
   end

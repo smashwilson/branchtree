@@ -4,6 +4,7 @@ module Branchtree
   module Commands
     class Common
       include TTY::Option
+      include Branchtree::Context
     
       usage do
         program "branchtree"
@@ -14,6 +15,14 @@ module Branchtree
         long "--mapfile PATH"
         desc "Path to the YAML file describing desired branch topography"
         default ENV.fetch("BRANCHTREE_MAPFILE", File.join(ENV["HOME"], "branchtree-map.yml"))
+      end
+
+      option :loglevel do
+        short "-l"
+        long "--log-level LEVEL"
+        desc "Choose the logging level for command output"
+        default "info"
+        permit TTY::Logger::LEVEL_NAMES.keys
       end
 
       option :help do
@@ -27,6 +36,11 @@ module Branchtree
           puts help
           exit 0
         end
+
+        if params[:loglevel]
+          logger.log_at(params[:loglevel].to_sym)
+          logger.debug "Logging at level #{params[:loglevel]}."
+        end
       end
 
       def load_situation
@@ -34,6 +48,7 @@ module Branchtree
       end
 
       def load_tree
+        logger.debug "Loading mapfile from #{params[:mapfile]}."
         Tree.load(params[:mapfile])
       end
 
