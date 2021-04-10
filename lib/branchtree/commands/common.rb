@@ -4,6 +4,7 @@ module Branchtree
   module Commands
     class Common
       include TTY::Option
+      include Branchtree::Context
     
       usage do
         program "branchtree"

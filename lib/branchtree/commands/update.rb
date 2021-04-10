@@ -3,8 +3,6 @@ require "branchtree/commands/common"
 module Branchtree
   module Commands
     class Update < Common
-      include Branchtree::Context
-
       usage do
         program "branchtree"
         desc "Propagate unmerged changes forward through the tree"

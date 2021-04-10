@@ -3,8 +3,6 @@ require "branchtree/commands/common"
 module Branchtree
   module Commands
     class Checkout < Common
-      include Branchtree::Context
-
       usage do
         program "branchtree"
         desc "Navigate the branch structure"
