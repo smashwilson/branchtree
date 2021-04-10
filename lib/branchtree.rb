@@ -7,6 +7,9 @@ module Branchtree
       "show" => Branchtree::Commands::Show,
       "checkout" => Branchtree::Commands::Checkout,
       "update" => Branchtree::Commands::Update,
+      "help" => Branchtree::Commands::Help,
+      "-h" => Branchtree::Commands::Help,
+      "--help" => Branchtree::Commands::Help,
     }
 
     command_name = argv.shift || "show"
@@ -54,3 +57,4 @@ require "branchtree/commands/common"
 require "branchtree/commands/show"
 require "branchtree/commands/checkout"
 require "branchtree/commands/update"
+require "branchtree/commands/help"
