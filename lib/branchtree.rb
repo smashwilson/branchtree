@@ -1,5 +1,6 @@
 require "tty-command"
 require "tty-prompt"
+require "tty-logger"
 
 module Branchtree
   def self.execute(argv)
@@ -39,9 +40,13 @@ module Branchtree
       def prompt
         @prompt ||= TTY::Prompt.new
       end
+
+      def logger
+        @logger ||= TTY::Logger.new
+      end
     end
 
-    %i[cmd qcmd prompt].each do |methodname|
+    %i[cmd qcmd prompt logger].each do |methodname|
       define_method(methodname) do
         Branchtree::Context.public_send(methodname)
       end
