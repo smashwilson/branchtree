@@ -36,10 +36,16 @@ module Branchtree
             line << " (branch missing)"
           else
             if branch.info.behind_parent > 0
-              line << " - #{branch.info.behind_parent} commits behind parent"
+              line << " - #{pluralize(branch.info.behind_parent, "commit")} behind parent"
             end
             if branch.info.ahead_of_upstream > 0
-              line << " - #{branch.info.ahead_of_upstream} unpushed commits"
+              if branch.info.behind_upstream > 0
+                line << " - diverged from upstream (#{branch.info.ahead_of_upstream}/#{branch.info.behind_upstream})"
+              else
+                line << " - #{pluralize(branch.info.ahead_of_upstream, "unpushed commit")}"
+              end
+            elsif branch.info.behind_upstream > 0
+              line << " - #{pluralize(branch.info.behind_upstream, "commit")} behind upstream"
             end
           end
 

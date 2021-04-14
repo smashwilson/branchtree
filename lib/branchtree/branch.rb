@@ -113,7 +113,7 @@ module Branchtree
         # Idenfity if we have an upstream
         upstream_ref, upstream_behind, upstream_ahead = "", 0, 0
         upstream_result = @branch.cmd.run!(
-          "git", "rev-parse", "--symbolic-full-name", "#{@branch.full_ref}@{u}",
+          "git", "rev-parse", "--symbolic-full-name", "#{@branch.name}@{u}",
         )
         if upstream_result.success?
           upstream_ref = upstream_result.out.chomp

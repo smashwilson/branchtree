@@ -83,7 +83,7 @@ RSpec.describe Branch do
         .with("git", "rev-list", "--left-right", "--count", "refs/heads/parent-ref...refs/heads/the-ref")
         .and_return(double(out: "2\t5\n"))
       allow(Context.cmd).to receive(:run!)
-        .with("git", "rev-parse", "--symbolic-full-name", "refs/heads/the-ref@{u}")
+        .with("git", "rev-parse", "--symbolic-full-name", "the-ref@{u}")
         .and_return(double(success?: false))
       
       branch.info.populate
@@ -104,7 +104,7 @@ RSpec.describe Branch do
         .with("git", "rev-list", "--left-right", "--count", "refs/heads/parent-ref...refs/heads/the-ref")
         .and_return(double(out: "0\t3\n"))
       allow(Context.cmd).to receive(:run!)
-        .with("git", "rev-parse", "--symbolic-full-name", "refs/heads/the-ref@{u}")
+        .with("git", "rev-parse", "--symbolic-full-name", "the-ref@{u}")
         .and_return(double(success?: true, out: "refs/remotes/origin/the-ref\n"))
       allow(Context.cmd).to receive(:run)
         .with("git", "rev-list", "--left-right", "--count", "refs/remotes/origin/the-ref...refs/heads/the-ref")
