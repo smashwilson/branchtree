@@ -15,7 +15,7 @@ module Branchtree
         tree = load_tree
         current_branch = tree.find_branch(situation.current_branch_name)
         unless current_branch
-          $stderr.puts "The current branch #{current_branch.name} is not within the tree."
+          $stderr.puts "The current branch #{situation.current_branch_name} is not within the tree."
           exit 1
         end
 
