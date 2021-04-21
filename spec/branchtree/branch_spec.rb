@@ -119,6 +119,46 @@ RSpec.describe Branch do
       expect(branch.info.ahead_of_upstream).to eq(2)
       expect(branch.info.behind_upstream).to eq(3)
     end
+
+    it "re-reads info" do
+      allow(Context.cmd).to receive(:run!)
+        .with("git", "rev-parse", "--verify", "--quiet", "refs/heads/the-ref")
+        .and_return(double(success?: true))
+      allow(Context.cmd).to receive(:run)
+        .with("git", "rev-list", "--left-right", "--count", "refs/heads/parent-ref...refs/heads/the-ref")
+        .and_return(double(out: "0\t3\n"))
+      allow(Context.cmd).to receive(:run!)
+        .with("git", "rev-parse", "--symbolic-full-name", "the-ref@{u}")
+        .and_return(double(success?: true, out: "refs/remotes/origin/the-ref\n"))
+      allow(Context.cmd).to receive(:run)
+        .with("git", "rev-list", "--left-right", "--count", "refs/remotes/origin/the-ref...refs/heads/the-ref")
+        .and_return(double(out: "3\t2\n"))
+      
+      branch.info.populate
+
+      allow(Context.cmd).to receive(:run!)
+        .with("git", "rev-parse", "--verify", "--quiet", "refs/heads/the-ref")
+        .and_return(double(success?: true))
+      allow(Context.cmd).to receive(:run)
+        .with("git", "rev-list", "--left-right", "--count", "refs/heads/parent-ref...refs/heads/the-ref")
+        .and_return(double(out: "0\t4\n"))
+      allow(Context.cmd).to receive(:run!)
+        .with("git", "rev-parse", "--symbolic-full-name", "the-ref@{u}")
+        .and_return(double(success?: true, out: "refs/remotes/origin/the-ref\n"))
+      allow(Context.cmd).to receive(:run)
+        .with("git", "rev-list", "--left-right", "--count", "refs/remotes/origin/the-ref...refs/heads/the-ref")
+        .and_return(double(out: "5\t2\n"))
+      
+      branch.info.repopulate
+
+      expect(branch.info).not_to be_empty
+      expect(branch.info).to be_valid
+      expect(branch.info.ahead_of_parent).to eq(4)
+      expect(branch.info.behind_parent).to eq(0)
+      expect(branch.info).to have_upstream
+      expect(branch.info.ahead_of_upstream).to eq(2)
+      expect(branch.info.behind_upstream).to eq(5)
+    end
   end
 
   context "#checkout" do

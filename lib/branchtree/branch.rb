@@ -125,12 +125,17 @@ module Branchtree
         end
 
         @branch.info = Info.new(
+          branch: @branch,
           ahead_of_parent: parent_ahead,
           behind_parent: parent_behind,
           upstream: upstream_ref,
           ahead_of_upstream: upstream_ahead,
           behind_upstream: upstream_behind,
         )
+      end
+
+      def repopulate
+        populate
       end
     end
 
@@ -146,10 +151,15 @@ module Branchtree
       def populate
         self
       end
+
+      def repopulate
+        self
+      end
     end
 
     class Info
-      def initialize(ahead_of_parent:, behind_parent:, upstream:, ahead_of_upstream:, behind_upstream:)
+      def initialize(branch:, ahead_of_parent:, behind_parent:, upstream:, ahead_of_upstream:, behind_upstream:)
+        @branch = branch
         @ahead_of_parent = ahead_of_parent
         @behind_parent = behind_parent
         @upstream = upstream
@@ -173,6 +183,10 @@ module Branchtree
 
       def populate
         self
+      end
+
+      def repopulate
+        NullInfo.new(@branch).populate
       end
     end
   end
