@@ -36,6 +36,7 @@ module Branchtree
           branchtree [show] - Display the current tree, including status of each branch.
           branchtree checkout - Interactively navigate to a branch within the tree.
           branchtree update - Propagate new commits from parent branches recursively through their children.
+          branchtree parent - Display the parent branch of the current HEAD.
 
           Use -h/--help flags to see options for each specific subcommand.
         HELP
