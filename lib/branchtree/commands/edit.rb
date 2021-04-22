@@ -12,7 +12,7 @@ module Branchtree
         super
 
         editor = ENV["BRANCHTREE_EDITOR"] || ENV["EDITOR"]
-        system editor, params[:mapfile]
+        system "#{editor} #{params[:mapfile]}"
       end
     end
   end
