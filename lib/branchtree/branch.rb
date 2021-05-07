@@ -105,7 +105,7 @@ module Branchtree
         end
 
         parent_behind, parent_ahead = 0, 0
-        if @branch.parent.info.valid?
+        if @branch.parent && @branch.parent.info.valid?
           # Count ahead-behind from parent
           ahead_behind_parent = @branch.cmd.run(
             "git", "rev-list", "--left-right", "--count", "refs/heads/#{@branch.parent_branch_name}...#{@branch.full_ref}",
