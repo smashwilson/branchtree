@@ -75,6 +75,25 @@ RSpec.describe Branch do
       expect(branch.info.behind_upstream).to eq(0)
     end
 
+    it "detects when its parent branch ref is not a valid branch name" do
+      allow(Context.cmd).to receive(:run!)
+        .with("git", "rev-parse", "--verify", "--quiet", "refs/heads/the-ref")
+        .and_return(double(success?: true))
+      allow(Context.cmd).to receive(:run!)
+        .with("git", "rev-parse", "--symbolic-full-name", "the-ref@{u}")
+        .and_return(double(success?: false))
+      allow(branch.parent.info).to receive(:valid?).and_return(false)
+
+      branch.info.populate
+      expect(branch.info).not_to be_empty
+      expect(branch.info).to be_valid
+      expect(branch.info.ahead_of_parent).to eq(0)
+      expect(branch.info.behind_parent).to eq(0)
+      expect(branch.info).not_to have_upstream
+      expect(branch.info.ahead_of_upstream).to eq(0)
+      expect(branch.info.behind_upstream).to eq(0)
+    end
+
     it "identifies the number of commits ahead and behind its parent" do
       allow(Context.cmd).to receive(:run!)
         .with("git", "rev-parse", "--verify", "--quiet", "refs/heads/the-ref")

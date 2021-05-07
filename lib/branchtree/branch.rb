@@ -15,7 +15,7 @@ module Branchtree
       end
     end
 
-    attr_reader :name, :children
+    attr_reader :name, :parent, :children
     attr_accessor :info
 
     def initialize(name, parent, rebase)
@@ -104,11 +104,14 @@ module Branchtree
           return @branch.info = InvalidInfo.new(@branch)
         end
 
-        # Count ahead-behind from parent
-        ahead_behind_parent = @branch.cmd.run(
-          "git", "rev-list", "--left-right", "--count", "refs/heads/#{@branch.parent_branch_name}...#{@branch.full_ref}",
-        ).out.chomp
-        parent_behind, parent_ahead = ahead_behind_parent.split(/\t/, 2).map(&:to_i)
+        parent_behind, parent_ahead = 0, 0
+        if @branch.parent.info.valid?
+          # Count ahead-behind from parent
+          ahead_behind_parent = @branch.cmd.run(
+            "git", "rev-list", "--left-right", "--count", "refs/heads/#{@branch.parent_branch_name}...#{@branch.full_ref}",
+          ).out.chomp
+          parent_behind, parent_ahead = ahead_behind_parent.split(/\t/, 2).map(&:to_i)
+        end
 
         # Idenfity if we have an upstream
         upstream_ref, upstream_behind, upstream_ahead = "", 0, 0
