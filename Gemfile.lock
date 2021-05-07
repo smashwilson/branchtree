@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    branchtree (0.1.0)
+    branchtree (0.1.1)
       tty-command (~> 0.10.0)
       tty-logger (~> 0.6.0)
       tty-option (~> 0.1.0)
